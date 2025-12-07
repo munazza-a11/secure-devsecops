@@ -5,6 +5,13 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    # ✅ FIX 1: Grant permissions to upload security results
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
     steps:
       - uses: actions/checkout@v3
 
@@ -14,14 +21,12 @@ jobs:
       - name: Run Tests
         run: npm test
 
-      # SAST Security Scan
+      # ✅ FIX 2: Updated to v3 (v2 is deprecated)
       - name: SAST Scan (CodeQL)
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           languages: javascript
 
+      # ✅ FIX 2: Updated to v3
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
-
-      - name: Deploy
-        run: echo "Deploying Application..."
+        uses: github/codeql-action/analyze@v3
